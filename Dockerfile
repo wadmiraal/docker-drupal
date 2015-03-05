@@ -27,13 +27,14 @@ RUN a2enmod rewrite
 # Setup MySQL
 ENV MYSQL_USER root
 ENV MYSQL_PASS admin
-RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/bind-address = 0.0.0.0/" /etc/mysql/my.cnf
+RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/" /etc/mysql/my.cnf
+RUN /etc/init.d/mysql restart
 
 # Install Drupal
 RUN rm -rf /var/www
 RUN cd /var && drush dl drupal && mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && chmod a+w /var/www/sites/default -R && chown -R www-data:www-data /var/www/
-RUN cd /var/www && drush si --db-url=mysql://root:admin@localhost/drupal --account-pass=admin
+RUN cd /var/www && drush si -y --db-url=mysql://root:admin@localhost/drupal --account-pass=admin
 
 EXPOSE 80 22 6081
 
