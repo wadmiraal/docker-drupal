@@ -39,7 +39,6 @@ RUN a2enmod rewrite
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/" /etc/mysql/my.cnf
 
 # Setup Supervisor.
-RUN echo -e '[supervisord]\nnodaemon=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:apache2]\ncommand=/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\n\n' >> /etc/supervisor/supervisord.conf
 
 # Install Drupal.
@@ -48,5 +47,6 @@ RUN cd /var && drush dl drupal && mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && chmod a+w /var/www/sites/default -R && chown -R www-data:www-data /var/www/
 RUN /etc/init.d/mysql start && cd /var/www && drush si -y --db-url=mysql://root:@localhost/drupal --account-pass=admin
 
+VOLUME ["/var/www"]
 EXPOSE 80 22 6081
-
+CMD exec supervisord -n
