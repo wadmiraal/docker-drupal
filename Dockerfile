@@ -15,9 +15,11 @@ RUN apt-get install -y \
 	php5-mysql \
 	php5-gd \
 	php5-curl \
+	libapache2-mod-php5 \
 	curl \
 	mysql-server \
 	mysql-client \
+	openssh-server \
 	supervisor
 RUN apt-get clean
 
@@ -38,15 +40,29 @@ RUN a2enmod rewrite
 # Setup MySQL, bind on all addresses.
 RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/" /etc/mysql/my.cnf
 
+# Setup SSH.
+
 # Setup Supervisor.
-RUN echo -e '[program:apache2]\ncommand=/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:apache2]\ncommand=/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 
 # Install Drupal.
 RUN rm -rf /var/www
-RUN cd /var && drush dl drupal && mv /var/drupal* /var/www
-RUN mkdir -p /var/www/sites/default/files && chmod a+w /var/www/sites/default -R && chown -R www-data:www-data /var/www/
-RUN /etc/init.d/mysql start && cd /var/www && drush si -y --db-url=mysql://root:@localhost/drupal --account-pass=admin
+RUN cd /var && \
+	drush dl drupal && \
+	mv /var/drupal* /var/www
+RUN mkdir -p /var/www/sites/default/files && \
+	chmod a+w /var/www/sites/default -R && \
+	mkdir /var/www/sites/all/modules/contrib -p && \
+	mkdir /var/www/sites/all/modules/custom && \
+	mkdir /var/www/sites/all/themes/contrib -p && \
+	mkdir /var/www/sites/all/themes/custom && \
+	chown -R www-data:www-data /var/www/
+RUN /etc/init.d/mysql start && \
+	cd /var/www && \
+	drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
+	drush dl admin_menu && \
+	drush en -y admin_menu
 
-VOLUME ["/var/www"]
-EXPOSE 80 22 6081
+EXPOSE 80 6081 22
 CMD exec supervisord -n
