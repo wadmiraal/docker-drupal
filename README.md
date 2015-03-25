@@ -25,9 +25,9 @@ For optimum usage, map some local directories to the container for easier develo
 
 The container exposes its `80` port (Apache), its `3306` port (MySQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
 
-Here's an example just running the container and forwarding `http://localhost:8080` to the container:
+Here's an example just running the container and forwarding `http://localhost:8080` and `http://localhost:8022` to the container:
 
-	docker run -i -d -p 8080:80 -t wadmiraal/docker
+	docker run -i -d -p 8080:80 -p 8022:22 -t wadmiraal/drupal
 
 ### Writing code locally
 
