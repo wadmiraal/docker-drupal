@@ -70,5 +70,5 @@ RUN /etc/init.d/mysql start && \
 	drush dl admin_menu && \
 	drush en -y admin_menu
 
-EXPOSE 80 6081 22
+EXPOSE 80 3306 22
 CMD exec supervisord -n
