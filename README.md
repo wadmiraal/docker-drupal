@@ -8,7 +8,7 @@ Installation
 
 ### Github
 
-Clone the repository locally. Build the `Dockerfile` by `cd`-inf into the folder and calling:
+Clone the repository locally. Build the `Dockerfile` by `cd`-ing into the folder and calling:
 
 	docker build -t yourname/drupal .
 
@@ -21,9 +21,9 @@ Get the image:
 Running it
 ----------
 
-For optimum usage, map some local directories to the container for easier development. I personally create at least a `module/` directory which will contain my custom modules. You can do the same for your themes.
+For optimum usage, map some local directories to the container for easier development. I personally create at least a `modules/` directory which will contain my custom modules. You can do the same for your themes.
 
-The container exposes its `80` port (Apache), its `` port (MySQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
+The container exposes its `80` port (Apache), its `3306` port (MySQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
 
 Here's an example just running the container and forwarding `http://localhost:8080` to the container:
 
