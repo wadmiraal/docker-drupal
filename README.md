@@ -32,13 +32,13 @@ The container exposes its `80` port (Apache), its `3306` port (MySQL) and its `2
 
 Here's an example just running the container and forwarding `http://localhost:8080` and `http://localhost:8022` to the container:
 
-	docker run -i -d -p 8080:80 -p 8022:22 -t wadmiraal/drupal
+	docker run -d -p 8080:80 -p 8022:22 -t wadmiraal/drupal
 
 ### Writing code locally
 
 Here's an example running the container, forwarding port `8080` like before, but also mounting Drupal's `sites/all/modules/custom/` folder to my local `modules/` folder. I can then start writing code on my local machine, directly in this folder, and it will be available inside the container:
 
-	docker run -i -d -p 8080:80 -v `pwd`/modules:/var/www/sites/all/modules/custom -t wadmiraal/drupal
+	docker run -d -p 8080:80 -v `pwd`/modules:/var/www/sites/all/modules/custom -t wadmiraal/drupal
 
 ### Using Drush
 
