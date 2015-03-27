@@ -3,6 +3,11 @@ Drupal development with Docker
 
 Quick and easy to use Docker container for your local Drupal development. It contains a LAMP stack and an SSH server, along with an up to date version of Drush.
 
+Tutorial
+--------
+
+You can read more about this image [here](http://wadmiraal.net/lore/2015/03/27/use-docker-to-kickstart-your-drupal-development/).
+
 Installation
 ------------
 
