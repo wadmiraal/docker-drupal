@@ -65,5 +65,5 @@ You should now be able to call:
 
 	drush @docker.wadmiraal_drupal cc all
 
-This will clear the cache of your Drupal site. ALl other commands will function as well.
+This will clear the cache of your Drupal site. All other commands will function as well.
 
