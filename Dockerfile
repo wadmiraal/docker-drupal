@@ -38,7 +38,12 @@ RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.i
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
 
 # Setup Apache.
+# In order to run our Simpletest tests, we need to make Apache
+# listen on the same port as the one we forwarded. Because we use
+# 8080 by default, we set it up for that port.
 RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/default
+RUN echo "Listen 8080" >> /etc/apache2/ports.conf
+RUN sed -i 's/VirtualHost *:80/VirtualHost */' /etc/apache2/sites-available/default
 RUN a2enmod rewrite
 
 # Setup MySQL, bind on all addresses.
