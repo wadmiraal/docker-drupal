@@ -53,7 +53,7 @@ Using Drush aliases, I can directly execute Drush commands locally and have them
 	  'ssh-options' => '-p 8022', // Or any other port you specify when running the container
 	);
 
-Next, copy the content of your local SSH public key (usually `~/.ssh/id_rsa.pub`; read [here](https://help.github.com/articles/generating-ssh-keys/) on how to generate one if you don't have it). SSH into the running container:
+Next, if you do not wish to type the root password everytime you run a Drush command, copy the content of your local SSH public key (usually `~/.ssh/id_rsa.pub`; read [here](https://help.github.com/articles/generating-ssh-keys/) on how to generate one if you don't have it). SSH into the running container:
 
 	# If you forwarded another port than 8022, change accordingly.
 	# Password is "root".
@@ -66,4 +66,20 @@ You should now be able to call:
 	drush @docker.wadmiraal_drupal cc all
 
 This will clear the cache of your Drupal site. All other commands will function as well.
+
+### Running tests
+
+If you want to run tests, you may need to take some additional steps. Drupal's Simpletest will use cURL to simulate user interactions with a freshly installed site when running tests. This "virtual" site resides under `http://localhost:[forwarded ip]`. This gives issues, though, as the *container* uses port `80`. By default, the container's virtual host will actually listen to *any* port, but you still need to tell Apache on which ports it should bind. By default, it will bind on `80` *and* `8080`, so if you use the above examples, you can start running your tests straight away. But, if you choose to forward to a different port, you must add it to Apache's configuration and restart Apache. You can simply do the following:
+
+	# If you forwarded to another port than 8022, change accordingly.
+	# Password is "root".
+	ssh root@localhost -p 8022
+	# Change the port number accordingly. This example is if you forward
+	# to port 8081.
+	echo "Listen 8081" >> /etc/apache2/ports.conf
+	/etc/init.d/apache2 restart
+
+Or, shorthand:
+
+	ssh root@localhost -p 8022 -C 'echo "Listen 8081" >> /etc/apache2/ports.conf && /etc/init.d/apache2 restart'
 
