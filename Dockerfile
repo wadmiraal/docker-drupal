@@ -33,6 +33,10 @@ RUN composer global update
 # Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
 RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
 
+# Setup PHP.
+RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
+RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
+
 # Setup Apache.
 RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/default
 RUN a2enmod rewrite
@@ -67,8 +71,9 @@ RUN mkdir -p /var/www/sites/default/files && \
 RUN /etc/init.d/mysql start && \
 	cd /var/www && \
 	drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
-	drush dl admin_menu && \
-	drush en -y admin_menu
+	drush dl admin_menu devel && \
+	drush en -y admin_menu simpletest && \
+	drush vset "admin_menu_tweak_modules" 1
 
 EXPOSE 80 3306 22
 CMD exec supervisord -n
