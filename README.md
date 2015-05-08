@@ -14,7 +14,7 @@ This image contains:
 * MySQL 5.5
 * PHP 5.4
 * Drush 6.6
-* Drupal 7.36
+* Drupal 7.37
 * Composer
 
 When launching, the container will contain a fully-installed, ready to use Drupal site.
