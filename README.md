@@ -44,6 +44,8 @@ Installation
 
 Clone the repository locally. Build the `Dockerfile` by `cd`-ing into the folder and calling:
 
+	git clone https://github.com/wadmiraal/docker-drupal.git
+	cd docker-drupal
 	docker build -t yourname/drupal .
 
 ### Docker repository
