@@ -16,6 +16,7 @@ This image contains:
 * Drush 6.6
 * Drupal 7.37
 * Composer
+* PHPMyAdmin
 
 When launching, the container will contain a fully-installed, ready to use Drupal site.
 
