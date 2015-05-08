@@ -116,4 +116,4 @@ Or, shorthand:
 
 ### MySQL and PHPMyAdmin
 
-PHPMyAdmin is available at `/phpmyadmin`. The MySQL port `3306` is exposed. The root account for MySQL is `root:` (no password).
+PHPMyAdmin is available at `/phpmyadmin`. The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
