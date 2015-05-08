@@ -1,7 +1,35 @@
 Drupal development with Docker
 ==============================
 
-Quick and easy to use Docker container for your local Drupal development. It contains a LAMP stack and an SSH server, along with an up to date version of Drush.
+[![](https://badge.imagelayers.io/wadmiraal/drupal.svg)](https://imagelayers.io/?images=wadmiraal/drupal:latest 'Get your own badge on imagelayers.io')
+
+Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Wheezy](https://wiki.debian.org/DebianWheezy).
+
+Summary
+-------
+
+This image contains:
+
+* Apache 2.2
+* MySQL 5.5
+* PHP 5.4
+* Drush 6.6
+* Drupal 7.36
+* Composer
+
+When launching, the container will contain a fully-installed, ready to use Drupal site.
+
+### Passwords
+
+* Drupal: `admin:admin`
+* MySQL: `root:` (no password)
+* SSH: `root:root`
+
+### Exposed ports
+
+* 80 (Apache)
+* 22 (SSH)
+* 3306 (MySQL)
 
 Tutorial
 --------
@@ -83,3 +111,6 @@ Or, shorthand:
 
 	ssh root@localhost -p 8022 -C 'echo "Listen 8081" >> /etc/apache2/ports.conf && /etc/init.d/apache2 restart'
 
+### MySQL and PHPMyAdmin
+
+PHPMyAdmin is available at `/phpmyadmin`. The MySQL port `3306` is exposed. The root account for MySQL is `root:` (no password).

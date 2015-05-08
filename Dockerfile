@@ -1,4 +1,4 @@
-FROM debian:latest
+FROM debian:wheezy
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -20,6 +20,7 @@ RUN apt-get install -y \
 	mysql-server \
 	mysql-client \
 	openssh-server \
+	phpmyadmin \
 	supervisor
 RUN apt-get clean
 
@@ -46,8 +47,12 @@ RUN echo "Listen 8080" >> /etc/apache2/ports.conf
 RUN sed -i 's/VirtualHost *:80/VirtualHost */' /etc/apache2/sites-available/default
 RUN a2enmod rewrite
 
+# Setup PHPMyAdmin
+RUN echo -e "\n# Include PHPMyAdmin configuration\nInclude /etc/phpmyadmin/apache.conf\n" >> /etc/apache2/apach2.conf
+RUN sed -i -e "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['AllowNoPassword'\]/\$cfg\['Servers'\]\[\$i\]\['AllowNoPassword'\]/g" /etc/phpmyadmin/config.inc.php
+
 # Setup MySQL, bind on all addresses.
-RUN sed -i -e"s/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/" /etc/mysql/my.cnf
+RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
 
 # Setup SSH.
 RUN echo 'root:root' | chpasswd
