@@ -48,7 +48,7 @@ RUN sed -i 's/VirtualHost *:80/VirtualHost */' /etc/apache2/sites-available/defa
 RUN a2enmod rewrite
 
 # Setup PHPMyAdmin
-RUN echo -e "\n# Include PHPMyAdmin configuration\nInclude /etc/phpmyadmin/apache.conf\n" >> /etc/apache2/apach2.conf
+RUN echo -e "\n# Include PHPMyAdmin configuration\nInclude /etc/phpmyadmin/apache.conf\n" >> /etc/apache2/apache2.conf
 RUN sed -i -e "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['AllowNoPassword'\]/\$cfg\['Servers'\]\[\$i\]\['AllowNoPassword'\]/g" /etc/phpmyadmin/config.inc.php
 
 # Setup MySQL, bind on all addresses.
