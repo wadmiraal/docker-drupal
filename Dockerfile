@@ -21,6 +21,7 @@ RUN apt-get install -y \
 	mysql-client \
 	openssh-server \
 	phpmyadmin \
+	wget \
 	supervisor
 RUN apt-get clean
 
@@ -37,6 +38,23 @@ RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
 # Setup PHP.
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
+
+# Setup Blackfire
+RUN wget -O - https://packagecloud.io/gpg.key | apt-key add -
+RUN echo "deb http://packages.blackfire.io/debian any main" > /etc/apt/sources.list.d/blackfire.list
+RUN apt-get update
+RUN apt-get install -y blackfire-agent blackfire-php
+RUN echo -e '#!/bin/bash\n\
+if [[ -z "$BLACKFIREIO_SERVER_ID" || -z "$BLACKFIREIO_SERVER_TOKEN" ]]; then\n\
+    while true; do\n\
+        sleep 1000\n\
+    done\n\
+else\n\
+    /usr/bin/blackfire-agent -server-id="$BLACKFIREIO_SERVER_ID" -server-token="$BLACKFIREIO_SERVER_TOKEN"\n\
+fi\n\
+' > /usr/local/bin/launch-blackfire
+RUN chmod +x /usr/local/bin/launch-blackfire
+RUN mkdir -p /var/run/blackfire
 
 # Setup Apache.
 # In order to run our Simpletest tests, we need to make Apache
@@ -65,6 +83,7 @@ RUN sed 's@session\s*required\s*pam_loginuid.so@session optional pam_loginuid.so
 RUN echo -e '[program:apache2]\ncommand=/bin/bash -c "source /etc/apache2/envvars && exec /usr/sbin/apache2 -DFOREGROUND"\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.pid /usr/sbin/mysqld\nautorestart=true\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
+RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >> /etc/supervisor/supervisord.conf
 
 # Install Drupal.
 RUN rm -rf /var/www
