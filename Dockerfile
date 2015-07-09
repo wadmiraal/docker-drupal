@@ -29,8 +29,8 @@ RUN apt-get clean
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-# Install Drush 6.
-RUN composer global require drush/drush:6.*
+# Install Drush 7.
+RUN composer global require drush/drush:7.*
 RUN composer global update
 # Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
 RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
@@ -39,7 +39,12 @@ RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
 
-# Setup Blackfire
+# Setup Blackfire.
+# Get the sources and install the Debian packages.
+# We create our own start script. If the environment variables are set, we
+# simply start Blackfire in the foreground. If not, we create a dummy daemon
+# script that simply loops indefinitely. This is to trick Supervisor into
+# thinking the program is running and avoid unnecessary error messages.
 RUN wget -O - https://packagecloud.io/gpg.key | apt-key add -
 RUN echo "deb http://packages.blackfire.io/debian any main" > /etc/apt/sources.list.d/blackfire.list
 RUN apt-get update

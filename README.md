@@ -13,8 +13,8 @@ This image contains:
 * Apache 2.2
 * MySQL 5.5
 * PHP 5.4
-* Drush 6.6
-* Drupal 7.37
+* Drush 7.0
+* Drupal 7.38
 * Composer
 * PHPMyAdmin
 * Blackfire
