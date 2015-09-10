@@ -106,8 +106,10 @@ RUN /etc/init.d/mysql start && \
 	cd /var/www && \
 	drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
 	drush dl admin_menu devel && \
-	drush en -y admin_menu simpletest && \
-	drush vset "admin_menu_tweak_modules" 1
+	drush en -y admin_menu simpletest devel && \
+	drush vset "admin_menu_tweak_modules" 1 && \
+	drush vset "admin_theme" "seven" && \
+	drush vset "node_admin_theme" 1
 
 EXPOSE 80 3306 22
 CMD exec supervisord -n
