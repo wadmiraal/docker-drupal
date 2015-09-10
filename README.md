@@ -14,7 +14,7 @@ This image contains:
 * MySQL 5.5
 * PHP 5.4
 * Drush 7.0
-* Drupal 7.38
+* Drupal 7.39
 * Composer
 * PHPMyAdmin
 * Blackfire
