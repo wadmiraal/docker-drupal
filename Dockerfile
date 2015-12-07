@@ -1,4 +1,4 @@
-FROM debian:wheezy
+FROM debian:jessie
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
 RUN rm /bin/sh && ln -s /bin/bash /bin/sh
@@ -9,8 +9,6 @@ RUN apt-get install -y \
 	vim \
 	git \
 	apache2 \
-	php-apc \
-	php5-fpm \
 	php5-cli \
 	php5-mysql \
 	php5-gd \
@@ -65,9 +63,10 @@ RUN mkdir -p /var/run/blackfire
 # In order to run our Simpletest tests, we need to make Apache
 # listen on the same port as the one we forwarded. Because we use
 # 8080 by default, we set it up for that port.
-RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/sites-available/default
+RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
+RUN sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www/' /etc/apache2/sites-available/000-default.conf
 RUN echo "Listen 8080" >> /etc/apache2/ports.conf
-RUN sed -i 's/VirtualHost *:80/VirtualHost */' /etc/apache2/sites-available/default
+RUN sed -i 's/VirtualHost \*:80/VirtualHost \*:\*/' /etc/apache2/sites-available/000-default.conf
 RUN a2enmod rewrite
 
 # Setup PHPMyAdmin

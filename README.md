@@ -3,18 +3,18 @@ Drupal development with Docker
 
 [![](https://badge.imagelayers.io/wadmiraal/drupal.svg)](https://imagelayers.io/?images=wadmiraal/drupal:latest 'Get your own badge on imagelayers.io')
 
-Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Wheezy](https://wiki.debian.org/DebianWheezy).
+Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Jessie](https://wiki.debian.org/DebianJessie).
 
 Summary
 -------
 
 This image contains:
 
-* Apache 2.2
+* Apache 2.4
 * MySQL 5.5
-* PHP 5.4
-* Drush 7.0
-* Drupal 7.39
+* PHP 5.6
+* Drush 7 or the latest release of Drupal Console (depending on tag).
+* Drupal 7 or 8 (depending on tag)
 * Composer
 * PHPMyAdmin
 * Blackfire
@@ -56,11 +56,23 @@ Clone the repository locally and build it:
 	cd docker-drupal
 	docker build -t yourname/drupal .
 
+Notice that there are several branches. The `master` branch always refers to the current recommended major Drupal version (version 8 at the time of writing). Other branches, like `7.x`, reflect prior versions.
+
 ### Docker repository
 
 Get the image:
 
 	docker pull wadmiraal/drupal
+
+#### Tags
+
+You can specify the specific Drupal version you want, like `7.41` or `8.0.0`. For example:
+
+  docker pull wadmiraal/drupal:7.41
+
+You can also use the latest Drupal version of any major release branch by omitting the minor (and patch) version information:
+
+  docker pull wadmiraal/drupal:7
 
 Running it
 ----------
@@ -81,7 +93,7 @@ Here's an example running the container, forwarding port `8080` like before, but
 
 ### Using Drush
 
-Using Drush aliases, I can directly execute Drush commands locally and have them be executed inside the container. Create a new aliases file in your home directory and add the following:
+Using Drush aliases, you can directly execute Drush commands locally and have them be executed inside the container. Create a new aliases file in your home directory and add the following:
 
 	# ~/.drush/docker.aliases.drushrc.php
 	<?php
