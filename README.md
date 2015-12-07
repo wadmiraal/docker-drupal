@@ -118,6 +118,24 @@ You should now be able to call:
 
 This will clear the cache of your Drupal site. All other commands will function as well.
 
+### Using Drupal Console
+
+Similarly to Drush, Drupal Console can also be run locally, and execute commands remotely. Create a new file called `~/.console/sites/docker.yml` and add the following contents:
+
+	# ~/.console/sites/docker.yml
+	wadmiraal_drupal:
+		root: /var/www
+		host: localhost
+		port: 8022 # Or any other port you specify when running the container
+		user: root
+		console: drupal
+
+You can now call something like:
+
+	drupal --target=docker.wadmiraal_drupal module:download ctools 8.x-3.0-alpha19
+
+You can find more information about Drupal Console [in the official documentation](https://hechoendrupal.gitbooks.io/drupal-console/content/en/using/how-to-use-drupal-console-in-a-remote-installation.html).
+
 ### Running tests
 
 If you want to run tests, you may need to take some additional steps. Drupal's Simpletest will use cURL to simulate user interactions with a freshly installed site when running tests. This "virtual" site resides under `http://localhost:[forwarded ip]`. This gives issues, though, as the *container* uses port `80`. By default, the container's virtual host will actually listen to *any* port, but you still need to tell Apache on which ports it should bind. By default, it will bind on `80` *and* `8080`, so if you use the above examples, you can start running your tests straight away. But, if you choose to forward to a different port, you must add it to Apache's configuration and restart Apache. You can simply do the following:
