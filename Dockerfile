@@ -121,7 +121,8 @@ RUN /etc/init.d/mysql start && \
 		--account-name=admin \
 		--account-mail=admin@example.com \
 		--account-pass=admin
-RUN cd /var/www && \
+RUN /etc/init.d/mysql start && \
+	cd /var/www && \
 	drupal module:download admin_toolbar 8.x-1.10 && \
 	drupal module:install admin_toolbar && \
 	drupal module:install simpletest
