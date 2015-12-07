@@ -97,7 +97,7 @@ RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drupal site:new www 8.0.0
+	drupal site:new www 8.0.1
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
 	mkdir /var/www/sites/all/modules/contrib -p && \
