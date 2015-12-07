@@ -33,6 +33,11 @@ RUN composer global update
 # Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
 RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
 
+# Install Drupal Console.
+RUN curl http://drupalconsole.com/installer -L -o drupal.phar
+RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
+RUN drupal init
+
 # Setup PHP.
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
@@ -92,23 +97,34 @@ RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drush dl drupal-7.41 && \
-	mv /var/drupal* /var/www
+	drupal site:new www 8.0.0
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
 	mkdir /var/www/sites/all/modules/contrib -p && \
 	mkdir /var/www/sites/all/modules/custom && \
 	mkdir /var/www/sites/all/themes/contrib -p && \
 	mkdir /var/www/sites/all/themes/custom && \
+	cp /var/www/sites/default/default.settings.php /var/www/sites/default/settings.php && \
+	cp /var/www/sites/default/default.services.yml /var/www/sites/default/services.yml && \
+	chmod 0664 /var/www/sites/default/settings.php && \
+	chmod 0664 /var/www/sites/default/services.yml && \
 	chown -R www-data:www-data /var/www/
 RUN /etc/init.d/mysql start && \
 	cd /var/www && \
-	drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
-	drush dl admin_menu devel && \
-	drush en -y admin_menu simpletest devel && \
-	drush vset "admin_menu_tweak_modules" 1 && \
-	drush vset "admin_theme" "seven" && \
-	drush vset "node_admin_theme" 1
+	drupal site:install standard \
+		--site-name="Drupal 8" \
+		--db-type=mysql \
+		--db-user=root \
+		--db-pass="" \
+		--db-name=drupal \
+		--site-mail=admin@example.com \
+		--account-name=admin \
+		--account-mail=admin@example.com \
+		--account-pass=admin
+RUN cd /var/www && \
+	drupal module:download admin_toolbar 8.x-1.10 && \
+	drupal module:install admin_toolbar && \
+	drupal module:install simpletest
 
 EXPOSE 80 3306 22
 CMD exec supervisord -n
