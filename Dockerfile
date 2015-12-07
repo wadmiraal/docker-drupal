@@ -93,7 +93,7 @@ RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drush dl drupal && \
+	drush dl drupal-7.41 && \
 	mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
