@@ -68,11 +68,11 @@ Get the image:
 
 You can specify the specific Drupal version you want, like `7.41` or `8.0.0`. For example:
 
-  docker pull wadmiraal/drupal:7.41
+	docker pull wadmiraal/drupal:7.41
 
 You can also use the latest Drupal version of any major release branch by omitting the minor (and patch) version information:
 
-  docker pull wadmiraal/drupal:7
+	docker pull wadmiraal/drupal:7
 
 Running it
 ----------
