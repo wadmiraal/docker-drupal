@@ -95,10 +95,14 @@ RUN echo -e '[program:mysql]\ncommand=/usr/bin/pidproxy /var/run/mysqld/mysqld.p
 RUN echo -e '[program:sshd]\ncommand=/usr/sbin/sshd -D\n\n' >> /etc/supervisor/supervisord.conf
 RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >> /etc/supervisor/supervisord.conf
 
+# Setup XDebug.
+RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/apache2/conf.d/20-xdebug.ini
+RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/cli/conf.d/20-xdebug.ini
+
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drupal site:new www 8.0.1
+	drupal site:new www 8.0.2
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
 	mkdir /var/www/sites/all/modules/contrib -p && \
@@ -123,9 +127,8 @@ RUN /etc/init.d/mysql start && \
 		--account-mail=admin@example.com \
 		--account-pass=admin
 RUN /etc/init.d/mysql start && \
-	cd /var/www && \
-	drupal module:download admin_toolbar 8.x-1.10 && \
-	drupal module:install admin_toolbar && \
+	cd /var/www && \ 
+	drupal module:install admin_toolbar --latest && \
 	drupal module:install simpletest
 
 EXPOSE 80 3306 22
