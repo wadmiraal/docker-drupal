@@ -78,6 +78,7 @@ RUN a2enmod rewrite
 # Setup PHPMyAdmin
 RUN echo -e "\n# Include PHPMyAdmin configuration\nInclude /etc/phpmyadmin/apache.conf\n" >> /etc/apache2/apache2.conf
 RUN sed -i -e "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['AllowNoPassword'\]/\$cfg\['Servers'\]\[\$i\]\['AllowNoPassword'\]/g" /etc/phpmyadmin/config.inc.php
+RUN sed -i -e "s/\/\/ \$cfg\['Servers'\]\[\$i\]\['table_uiprefs'\]/\$cfg\['Servers'\]\[\$i\]\['pma__table_uiprefs'\]/g" /etc/phpmyadmin/config.inc.php
 
 # Setup MySQL, bind on all addresses.
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
