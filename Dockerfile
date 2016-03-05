@@ -28,11 +28,10 @@ RUN apt-get clean
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-# Install Drush 7.
-RUN composer global require drush/drush:7.*
-RUN composer global update
-# Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
-RUN ln -s /root/.composer/vendor/bin/drush /usr/local/bin/drush
+# Install Drush 8 (master) as phar.
+RUN wget http://files.drush.org/drush.phar
+RUN mv drush.phar /usr/local/bin/drush && chmod +x /usr/local/bin/drush
+RUN drush status
 
 # Install Drupal Console.
 RUN curl http://drupalconsole.com/installer -L -o drupal.phar
@@ -103,7 +102,7 @@ RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/cli/conf.d/20-xdebug.ini
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drupal site:new www 8.0.4
+	drupal site:new www 8.0.5
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
 	mkdir /var/www/sites/all/modules/contrib -p && \
@@ -128,7 +127,7 @@ RUN /etc/init.d/mysql start && \
 		--account-mail=admin@example.com \
 		--account-pass=admin
 RUN /etc/init.d/mysql start && \
-	cd /var/www && \ 
+	cd /var/www && \
 	drupal module:install admin_toolbar --latest && \
 	drupal module:install simpletest
 
