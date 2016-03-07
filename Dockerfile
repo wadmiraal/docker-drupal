@@ -31,7 +31,6 @@ RUN mv composer.phar /usr/local/bin/composer
 # Install Drush 8 (master) as phar.
 RUN wget http://files.drush.org/drush.phar
 RUN mv drush.phar /usr/local/bin/drush && chmod +x /usr/local/bin/drush
-RUN drush status
 
 # Install Drupal Console.
 RUN curl http://drupalconsole.com/installer -L -o drupal.phar
