@@ -21,6 +21,7 @@ RUN apt-get install -y \
 	openssh-server \
 	phpmyadmin \
 	wget \
+	unzip \
 	supervisor
 RUN apt-get clean
 
