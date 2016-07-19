@@ -25,19 +25,6 @@ RUN apt-get install -y \
 	supervisor
 RUN apt-get clean
 
-# Install Composer.
-RUN curl -sS https://getcomposer.org/installer | php
-RUN mv composer.phar /usr/local/bin/composer
-
-# Install Drush 8 (master) as phar.
-RUN wget http://files.drush.org/drush.phar
-RUN mv drush.phar /usr/local/bin/drush && chmod +x /usr/local/bin/drush
-
-# Install Drupal Console.
-RUN curl http://drupalconsole.com/installer -L -o drupal.phar
-RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
-RUN drupal init
-
 # Setup PHP.
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
 RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
@@ -98,6 +85,19 @@ RUN echo -e '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >
 # Setup XDebug.
 RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/apache2/conf.d/20-xdebug.ini
 RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/cli/conf.d/20-xdebug.ini
+
+# Install Composer.
+RUN curl -sS https://getcomposer.org/installer | php
+RUN mv composer.phar /usr/local/bin/composer
+
+# Install Drush 8 (master) as phar.
+RUN wget http://files.drush.org/drush.phar
+RUN mv drush.phar /usr/local/bin/drush && chmod +x /usr/local/bin/drush
+
+# Install Drupal Console.
+RUN curl http://drupalconsole.com/installer -L -o drupal.phar
+RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
+RUN drupal init
 
 # Install Drupal.
 RUN rm -rf /var/www
