@@ -14,6 +14,7 @@ RUN apt-get install -y \
 	php5-gd \
 	php5-curl \
 	php5-xdebug \
+	php5-sqlite \
 	libapache2-mod-php5 \
 	curl \
 	mysql-server \
@@ -90,10 +91,6 @@ RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/cli/conf.d/20-xdebug.ini
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-# Install Drush 8 (master) as phar.
-RUN wget http://files.drush.org/drush.phar
-RUN mv drush.phar /usr/local/bin/drush && chmod +x /usr/local/bin/drush
-
 # Install Drupal Console.
 RUN curl http://drupalconsole.com/installer -L -o drupal.phar
 RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
@@ -129,7 +126,7 @@ RUN /etc/init.d/mysql start && \
 RUN /etc/init.d/mysql start && \
 	cd /var/www && \
 	drupal module:install admin_toolbar --latest && \
-	drupal module:install simpletest
+	drupal module:install devel --latest
 
 EXPOSE 80 3306 22
 CMD exec supervisord -n
