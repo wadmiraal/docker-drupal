@@ -67,9 +67,14 @@ RUN mkdir -p /var/run/blackfire
 # 8080 by default, we set it up for that port.
 RUN sed -i 's/AllowOverride None/AllowOverride All/' /etc/apache2/apache2.conf
 RUN sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www/' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's/DocumentRoot \/var\/www\/html/DocumentRoot \/var\/www/' /etc/apache2/sites-available/default-ssl.conf
 RUN echo "Listen 8080" >> /etc/apache2/ports.conf
+RUN echo "Listen 8443" >> /etc/apache2/ports.conf
 RUN sed -i 's/VirtualHost \*:80/VirtualHost \*:\*/' /etc/apache2/sites-available/000-default.conf
+RUN sed -i 's/VirtualHost __default__:443/VirtualHost _default_:443 _default_:8443/' /etc/apache2/sites-available/default-ssl.conf
 RUN a2enmod rewrite
+RUN a2enmod ssl
+RUN a2ensite default-ssl.conf
 
 # Setup PHPMyAdmin
 RUN echo -e "\n# Include PHPMyAdmin configuration\nInclude /etc/phpmyadmin/apache.conf\n" >> /etc/apache2/apache2.conf
@@ -117,5 +122,5 @@ RUN /etc/init.d/mysql start && \
 	drush vset "admin_theme" "seven" && \
 	drush vset "node_admin_theme" 1
 
-EXPOSE 80 3306 22
+EXPOSE 80 3306 22 443
 CMD exec supervisord -n
