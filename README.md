@@ -30,7 +30,7 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 
 ### Exposed ports
 
-* 80 (Apache)
+* 80 and 443 (Apache)
 * 22 (SSH)
 * 3306 (MySQL)
 
@@ -80,11 +80,15 @@ Running it
 
 For optimum usage, map some local directories to the container for easier development. I personally create at least a `modules/` directory which will contain my custom modules. You can do the same for your themes.
 
-The container exposes its `80` port (Apache), its `3306` port (MySQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
+The container exposes its `80` and `443` ports (Apache), its `3306` port (MySQL) and its `22` port (SSH). Make good use of this by forwarding your local ports. You should at least forward to port `80` (using `-p local_port:80`, like `-p 8080:80`). A good idea is to also forward port `22`, so you can use Drush from your local machine using aliases, and directly execute commands inside the container, without attaching to it.
 
 Here's an example just running the container and forwarding `localhost:8080` and `localhost:8022` to the container:
 
 	docker run -d -p 8080:80 -p 8022:22 -t wadmiraal/drupal
+
+If you want to run in HTTPS, you can use:
+
+        docker run -d -p 8443:443 -p 8022:22 -t wadmiraal/drupal
 
 ### Writing code locally
 
@@ -153,6 +157,8 @@ Or, shorthand:
 
 	ssh root@localhost -p 8022 -C 'echo "Listen 8081" >> /etc/apache2/ports.conf && /etc/init.d/apache2 restart'
 
+If you want to run tests from HTTPS, though, you will need to edit the VHost file `/etc/apache2/sites-available/default-ssl.conf` as well, and add your port to the list.
+
 ### MySQL and PHPMyAdmin
 
 PHPMyAdmin is available at `/phpmyadmin`. The MySQL port `3306` is exposed. The root account for MySQL is `root` (no password).
@@ -166,3 +172,4 @@ Example:
 	docker run -it --rm -e BLACKFIREIO_SERVER_ID="[your id here]" -e BLACKFIREIO_SERVER_TOKEN="[your token here]" -p 8022:22 -p 8080:80 wadmiraal/drupal
 
 You can now start profiling your application.
+
