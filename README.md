@@ -1,7 +1,7 @@
 Drupal development with Docker
 ==============================
 
-[![](https://badge.imagelayers.io/wadmiraal/drupal.svg)](https://imagelayers.io/?images=wadmiraal/drupal:latest 'Get your own badge on imagelayers.io')
+[![](https://images.microbadger.com/badges/image/wadmiraal/drupal.svg)](https://microbadger.com/images/wadmiraal/drupal "Get your own image badge on microbadger.com")
 
 Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Jessie](https://wiki.debian.org/DebianJessie).
 
