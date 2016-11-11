@@ -1,7 +1,6 @@
 FROM debian:jessie
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 # Install packages.
 RUN apt-get update
