@@ -98,9 +98,14 @@ RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/cli/conf.d/20-xdebug.ini
 RUN curl -sS https://getcomposer.org/installer | php
 RUN mv composer.phar /usr/local/bin/composer
 
-# Install Drupal Console.
-RUN curl http://drupalconsole.com/installer -L -o drupal.phar
-RUN mv drupal.phar /usr/local/bin/drupal && chmod +x /usr/local/bin/drupal
+# Install Drupal Console. There are no stable releases yet, so set the minimum 
+# stability to dev.
+RUN composer global require drupal/console:~1.0@dev \
+	--prefer-dist \
+	--optimize-autoloader \
+	--sort-packages
+# Unfortunately, adding the composer vendor dir to the PATH doesn't seem to work. So:
+RUN ln -s /root/.composer/vendor/bin/drupal /usr/local/bin/drupal
 RUN drupal init
 
 # Install Drupal.
