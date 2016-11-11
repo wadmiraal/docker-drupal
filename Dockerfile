@@ -111,7 +111,7 @@ RUN drupal init
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drupal site:new www 8.1.10
+	drupal site:new www 8.2.0
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
 	mkdir /var/www/sites/all/modules/contrib -p && \
