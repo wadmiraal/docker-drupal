@@ -2,5 +2,5 @@ language: c
 sudo: required
 services:
   - docker
-script: ./build.sh
+script: ./test.sh
 
