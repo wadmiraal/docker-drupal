@@ -1,7 +1,7 @@
 Drupal development with Docker
 ==============================
 
-[![](https://images.microbadger.com/badges/image/wadmiraal/drupal.svg)](https://microbadger.com/images/wadmiraal/drupal "Get your own image badge on microbadger.com")
+[![](https://images.microbadger.com/badges/image/wadmiraal/drupal.svg)](https://microbadger.com/images/wadmiraal/drupal "Get your own image badge on microbadger.com")[![Build Status](https://travis-ci.org/wadmiraal/docker-drupal.svg?branch=7.x)](https://travis-ci.org/wadmiraal/docker-drupal)
 
 Quick and easy to use Docker container for your *local Drupal development*. It contains a LAMP stack and an SSH server, along with an up to date version of Drush. It is based on [Debian Jessie](https://wiki.debian.org/DebianJessie).
 
@@ -13,8 +13,8 @@ This image contains:
 * Apache 2.4
 * MySQL 5.5
 * PHP 5.6
-* Drush 7 (for `7` and `7.*` tags)
-* The latest release of Drupal Console (for `8` or `8.*.*` tags)
+* Drush (version 7 for `7` and `7.*` tags, version for `8` and `8.*.*` tags)
+* The latest release of Drupal Console (for `8` and `8.*.*` tags)
 * Drupal 7 or 8 (depending on tag)
 * Composer
 * PHPMyAdmin
