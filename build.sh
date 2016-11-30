@@ -12,6 +12,7 @@ $DOCKER build -t wadmiraal/drupal:$TAG .
 
 if [[ -z $? ]]; then
   echo -e "\e[31mBuild failed! Aborting.\e[0m"
+  EXIT_CODE=1
 else
   echo -e "\e[32mBuild succeeded. Starting a new container...\e[0m"
   $DOCKER run -d --name $CONTAINER_NAME wadmiraal/drupal:$TAG >> /dev/null
@@ -19,6 +20,7 @@ else
   RUNNING=$($DOCKER ps | grep $CONTAINER_NAME)
   if [[ -z $RUNNING ]]; then
     echo -e "\e[31mCouldn't start a new container! Aborting.\e[0m"
+    EXIT_CODE=1
   else
     echo -e "\e[32mStarted container. Testing services are running...\e[0m"
    
@@ -114,7 +116,7 @@ else
     else
       echo -e "\e[1;32mFinished build and tests. All systems green. Ready to tag and push to the registry.\e[0m"
     fi
-    exit $EXIT_CODE
   fi
 fi
+exit $EXIT_CODE
 
