@@ -131,6 +131,8 @@ RUN /etc/init.d/mysql start && \
 	cd /var/www && \
 	drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
 	drush dl admin_menu devel && \
+	# In order to enable Simpletest, we need to download PHPUnit.
+	composer install --dev && \
 	# Admin Menu is broken. See https://www.drupal.org/node/2563867 for more info.
 	# As long as it is not fixed, only enable simpletest and devel.
 	# drush en -y admin_menu simpletest devel
