@@ -114,7 +114,7 @@ RUN drupal init
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drush dl drupal-8.2.3 && \
+	drush dl drupal-8.2.4 && \
 	mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
