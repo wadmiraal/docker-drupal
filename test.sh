@@ -23,7 +23,7 @@ else
     EXIT_CODE=1
   else
     echo -e "\e[32mStarted container. Testing services are running...\e[0m"
-   
+
     # Allow services to start.
     sleep 3
 
@@ -35,7 +35,7 @@ else
     else
       echo -e "\e[32m✓ is running.\e[0m"
     fi
-   
+
     echo -n "MySQL: "
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'pgrep "mysql"')
     if [[ -z $RUNNING ]]; then
@@ -44,7 +44,7 @@ else
     else
       echo -e "\e[32m✓ is running.\e[0m"
     fi
-    
+
     echo -n "SSH: "
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'pgrep "sshd"')
     if [[ -z $RUNNING ]]; then
@@ -53,7 +53,7 @@ else
     else
       echo -e "\e[32m✓ is running.\e[0m"
     fi
-    
+
     echo -n "Cron: "
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'pgrep "cron"')
     if [[ -z $RUNNING ]]; then
@@ -62,7 +62,7 @@ else
     else
       echo -e "\e[32m✓ is running.\e[0m"
     fi
-    
+
     echo -n "Apache: "
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'pgrep "apache2"')
     if [[ -z $RUNNING ]]; then
@@ -71,7 +71,7 @@ else
     else
       echo -e "\e[32m✓ is running.\e[0m"
     fi
-    
+
     echo -n "Drush: "
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'drush status | grep "Drush version"')
     if [[ -z $RUNNING ]]; then
@@ -80,14 +80,14 @@ else
     else
       echo -e "\e[32m✓ is available.\e[0m"
     fi
-    
+
     echo "Drupal: "
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'drush --root=/var/www status | grep "Drupal version"')
     if [[ -z $RUNNING ]]; then
-      echo -e "\t\e[31m✗ is not running!\e[0m"
+      echo -e "\t\e[31m✗ is not installed!\e[0m"
       EXIT_CODE=1
     else
-      echo -e "\t\e[32m✓ is running.\e[0m"
+      echo -e "\t\e[32m✓ is installed.\e[0m"
     fi
     RUNNING=$($DOCKER exec $CONTAINER_NAME bash -c 'curl -s http://localhost | grep "Log in"')
     if [[ -z $RUNNING ]]; then
@@ -96,7 +96,7 @@ else
     else
       echo -e "\t\e[32m✓ is available.\e[0m"
     fi
-    
+
     echo "Removing test container..."
     $DOCKER stop $CONTAINER_NAME >> /dev/null
     $DOCKER rm $CONTAINER_NAME >> /dev/null
