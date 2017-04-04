@@ -141,6 +141,8 @@ RUN /etc/init.d/mysql start && \
 RUN /etc/init.d/mysql start && \
 	cd /var/www && \
 	drush cset system.theme default 'bartik' -y
+# Allow Kernel and Browser tests to be run via PHPUnit.	
+RUN sed -i 's/name="SIMPLETEST_DB" value=""/name="SIMPLETEST_DB" value="sqlite:\/\/localhost\/tmp\/db.sqlite"/' /var/www/core/phpunit.xml.dist
 
 EXPOSE 80 3306 22 443
 CMD exec supervisord -n
