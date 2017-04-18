@@ -1,7 +1,7 @@
 FROM debian:jessie
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
-ENV DRUPAL_VERSION 8.2.7
+ENV DRUPAL_VERSION 8.3.0
 
 # Install packages.
 RUN apt-get update
