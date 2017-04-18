@@ -1,6 +1,7 @@
 FROM debian:jessie
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
+ENV DRUPAL_VERSION 8.2.7
 
 # Install packages.
 RUN apt-get update
@@ -114,7 +115,7 @@ RUN drupal init
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drush dl drupal-8.2.7 && \
+	drush dl drupal-$DRUPAL_VERSION && \
 	mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
@@ -129,7 +130,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 	chown -R www-data:www-data /var/www/
 RUN /etc/init.d/mysql start && \
 	cd /var/www && \
-	drush si -y minimal --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
+	drush si -y standard --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
 	drush dl admin_menu devel && \
 	# In order to enable Simpletest, we need to download PHPUnit.
 	composer install --dev && \
