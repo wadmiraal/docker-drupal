@@ -1,4 +1,4 @@
-FROM debian:jessie
+FROM debian:stretch
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
 ENV DRUPAL_VERSION 8.3.2
@@ -9,13 +9,13 @@ RUN apt-get install -y \
 	vim \
 	git \
 	apache2 \
-	php5-cli \
-	php5-mysql \
-	php5-gd \
-	php5-curl \
-	php5-xdebug \
-	php5-sqlite \
-	libapache2-mod-php5 \
+	php-cli \
+	php-mysql \
+	php-gd \
+	php-curl \
+	php-xdebug \
+	php7.0-sqlite3 \
+	libapache2-mod-php \
 	curl \
 	mysql-server \
 	mysql-client \
@@ -24,12 +24,13 @@ RUN apt-get install -y \
 	wget \
 	unzip \
 	cron \
+        gnupg \
 	supervisor
 RUN apt-get clean
 
 # Setup PHP.
-RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/apache2/php.ini
-RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php5/cli/php.ini
+RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.0/apache2/php.ini
+RUN sed -i 's/display_errors = Off/display_errors = On/' /etc/php/7.0/cli/php.ini
 
 # Setup Blackfire.
 # Get the sources and install the Debian packages.
@@ -76,6 +77,8 @@ RUN sed -i -e "s/\$cfg\['Servers'\]\[\$i\]\['\(table_uiprefs\|history\)'\].*/\$c
 
 # Setup MySQL, bind on all addresses.
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
+RUN /etc/init.d/mysql start && \
+	mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO drupal@localhost IDENTIFIED BY 'drupal'"
 
 # Setup SSH.
 RUN echo 'root:root' | chpasswd
@@ -92,8 +95,8 @@ RUN echo '[program:blackfire]\ncommand=/usr/local/bin/launch-blackfire\n\n' >> /
 RUN echo '[program:cron]\ncommand=cron -f\nautorestart=false \n\n' >> /etc/supervisor/supervisord.conf
 
 # Setup XDebug.
-RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/apache2/conf.d/20-xdebug.ini
-RUN echo "xdebug.max_nesting_level = 300" >> /etc/php5/cli/conf.d/20-xdebug.ini
+RUN echo "xdebug.max_nesting_level = 300" >> /etc/php/7.0/apache2/conf.d/20-xdebug.ini
+RUN echo "xdebug.max_nesting_level = 300" >> /etc/php/7.0/cli/conf.d/20-xdebug.ini
 
 # Install Composer.
 RUN curl -sS https://getcomposer.org/installer | php
@@ -130,7 +133,7 @@ RUN mkdir -p /var/www/sites/default/files && \
 	chown -R www-data:www-data /var/www/
 RUN /etc/init.d/mysql start && \
 	cd /var/www && \
-	drush si -y standard --db-url=mysql://root:@localhost/drupal --account-pass=admin && \
+	drush si -y standard --db-url=mysql://drupal:drupal@localhost/drupal --account-pass=admin && \
 	drush dl admin_menu devel && \
 	# In order to enable Simpletest, we need to download PHPUnit.
 	composer install --dev && \
