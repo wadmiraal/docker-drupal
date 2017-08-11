@@ -1,7 +1,7 @@
 FROM debian:stretch
 MAINTAINER Wouter Admiraal <wad@wadmiraal.net>
 ENV DEBIAN_FRONTEND noninteractive
-ENV DRUPAL_VERSION 8.3.3
+ENV DRUPAL_VERSION 8.3.4
 
 # Install packages.
 RUN apt-get update
