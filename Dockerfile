@@ -86,7 +86,7 @@ RUN sed -i -e "s/\$cfg\['Servers'\]\[\$i\]\['\(table_uiprefs\|history\)'\].*/\$c
 # Setup MySQL, bind on all addresses.
 RUN sed -i -e 's/^bind-address\s*=\s*127.0.0.1/#bind-address = 127.0.0.1/' /etc/mysql/my.cnf
 RUN /etc/init.d/mysql start && \
-	mysql -e "CREATE DATABASE drupal; CREATE USER drupal; GRANT ALL PRIVILEGES ON drupal.* TO drupal@'%' IDENTIFIED BY 'drupal';"
+        mysql -u root -e "GRANT ALL PRIVILEGES ON *.* TO drupal@localhost IDENTIFIED BY 'drupal'"
 
 # Setup SSH.
 RUN echo 'root:root' | chpasswd
