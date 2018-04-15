@@ -26,7 +26,7 @@ When launching, the container will contain a fully-installed, ready to use Drupa
 
 * Drupal: `admin:admin`
 * MySQL: `root:` (no password); `drupal:drupal`
-* SSH: `root:root`
+* SSH: `drupal:drupal` (root:root)
 
 ### Exposed ports
 

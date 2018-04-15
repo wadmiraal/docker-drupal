@@ -82,6 +82,8 @@ RUN /etc/init.d/mysql start && \
 
 # Setup SSH.
 RUN echo 'root:root' | chpasswd
+RUN useradd -ms /bin/bash drupal
+RUN echo 'drupal:drupal' | chpasswd
 RUN sed -i 's/^#PermitRootLogin.+/PermitRootLogin yes/' /etc/ssh/sshd_config
 RUN mkdir /var/run/sshd && chmod 0755 /var/run/sshd
 RUN mkdir -p /root/.ssh/ && touch /root/.ssh/authorized_keys
