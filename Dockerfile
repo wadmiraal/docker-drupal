@@ -109,7 +109,7 @@ RUN echo "xdebug.max_nesting_level = 300" >> /etc/php/7.0/cli/conf.d/20-xdebug.i
 # Install Drupal.
 RUN rm -rf /var/www
 RUN cd /var && \
-	drush dl drupal-7.57 && \
+	drush dl drupal-7.58 && \
 	mv /var/drupal* /var/www
 RUN mkdir -p /var/www/sites/default/files && \
 	chmod a+w /var/www/sites/default -R && \
