@@ -14,6 +14,7 @@ RUN apt-get install -y \
 	php-gd \
 	php-curl \
 	php-xdebug \
+	php-bcmath \
 	php7.0-sqlite3 \
 	libapache2-mod-php \
 	curl \
